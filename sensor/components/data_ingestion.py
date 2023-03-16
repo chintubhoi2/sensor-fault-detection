@@ -1,8 +1,10 @@
+from sensor.constant.training_pipeline import SCHEMA_FILE_PATH
 from sensor.logger import logging
 from sensor.exception import SensorException
 from sensor.entity.config_entity import DataIngestionConfig
 from sensor.entity.artifact_entity import DataIngestionArtifact
 from sensor.data_access.sensor_data import SensorData
+from sensor.utils.main_utils import read_yaml_file
 import sys,os
 from pandas import DataFrame
 from sklearn.model_selection import train_test_split
@@ -12,6 +14,7 @@ class DataIngestion():
     def __init__(self,data_ingestion_config:DataIngestionConfig):
         try:
             self.data_ingestion_config = data_ingestion_config
+            self._schema_config = read_yaml_file(SCHEMA_FILE_PATH)
         except Exception as e:
             raise SensorException(e,sys)
 
@@ -51,8 +54,8 @@ class DataIngestion():
 
             logging.info("exporting train and test data")
 
-            train_set.to_csv(self.data_ingestion_config.training_file_path,index=False,header=None)
-            test_set.to_csv(self.data_ingestion_config.testing_file_path,index=False,header=None)
+            train_set.to_csv(self.data_ingestion_config.training_file_path,index=False,header=True)
+            test_set.to_csv(self.data_ingestion_config.testing_file_path,index=False,header=True)
 
             logging.info("exported train and test file to train test file path")
         
@@ -67,6 +70,7 @@ class DataIngestion():
     def initiate_data_ingestion(self)->DataIngestionArtifact:
         try:
             dataframe = self.export_data_into_feature_store()
+            dataframe = dataframe.drop(columns=self._schema_config["drop_columns"],axis=1)
             self.split_data_as_train_test(dataframe=dataframe)
             data_ingestion_artifact = DataIngestionArtifact(trained_file_path=self.data_ingestion_config.training_file_path,
             test_file_path=self.data_ingestion_config.testing_file_path)
