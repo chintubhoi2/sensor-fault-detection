@@ -72,8 +72,9 @@ class Datavalidataion:
                     "drift_status":is_found 
                 }})
             drift_report_file_path = self.data_validation_config.drift_report_file_path
-            dir_path = os.makedirs(drift_report_file_path,exist_ok=True)
-            write_yaml_file(drift_report_file_path,report,)
+            dir_path = os.path.dirname(drift_report_file_path)
+            os.makedirs(drift_report_file_path,exist_ok=True)
+            write_yaml_file(drift_report_file_path,report)
 
             return status
         except Exception as e:
@@ -104,8 +105,15 @@ class Datavalidataion:
 
             if len(error_message)>0:
                 raise Exception(error_message)
+            else:
+                valid_data_file_path = self.data_validation_config.valid_train_file_path
+                dir_path = os.path.dirname(valid_data_file_path)
+                os.makedirs(dir_path,exist_ok=True)
+                train_dataframe.to_csv(self.data_validation_config.valid_train_file_path,index=False,header=True)
+                test_dataframe.to_csv(self.data_validation_config.valid_test_file_path,index=False,header=True)
             
             status = self.detect_drift_report(base_df=train_dataframe,current_df=test_dataframe)
+
 
             data_validation_artifact = DataValidationArtifact(
                 validation_status = status,

@@ -35,5 +35,11 @@ DATA_VALIDATION_INVALID_DIR: str = "invalid"
 DATA_VALIDATION_DRIFT_REPORT_DIR: str = "drift_report"
 DATA_VALIDATION_DRIFT_REPORT_FILE_NAME: str = "report.yml"
 
+"""
+Data Transformation related constant stsrt with DATA_VALIDATION VAR NAME
+"""
+DATA_TRANSFORMATION_DIR_NAME: str ="data_transformation"
+DATA_TRANSFORMATION_TRANSFORMED_DATA_DIR: str = "transformed"
+DATA_TRANSFORMATION_TRANSFORMED_OBJECT_DIR: str = "transformed_obj"
 
 
