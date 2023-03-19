@@ -72,8 +72,8 @@ class Datavalidataion:
                     "drift_status":is_found 
                 }})
             drift_report_file_path = self.data_validation_config.drift_report_file_path
-            dir_path = os.path.dirname(drift_report_file_path)
-            os.makedirs(drift_report_file_path,exist_ok=True)
+            #dir_path = os.path.dirname(drift_report_file_path)
+            #os.makedirs(dir_path,exist_ok=True)
             write_yaml_file(drift_report_file_path,report)
 
             return status
