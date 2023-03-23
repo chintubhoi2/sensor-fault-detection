@@ -13,7 +13,7 @@ def read_yaml_file(file_path:str)-> dict:
         raise SensorException(e,sys)
     
 
-def write_yaml_file(file_path:str, content: object, replace: bool =False)->None:
+def write_yaml_file(file_path:str, content: object, replace: bool=False)->None:
     try:
         if replace:
             if os.path.dirname(file_path):
@@ -59,8 +59,7 @@ def load_object(file_path: str)->object:
             raise Exception(f"the file {file_path} does not exist")
         
         with open(file_path,"rb") as file_obj:
-            dill.load(file_obj)
-        return dill
+            return dill.load(file_obj)
     except Exception as e:
         raise SensorException(e,sys)
     

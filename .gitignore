@@ -4,6 +4,7 @@ __pycache__/
 *$py.class
 artifact/*
 .vscode/
+saved_models/*
 /pyrightconfig.json
 
 # C extensions
