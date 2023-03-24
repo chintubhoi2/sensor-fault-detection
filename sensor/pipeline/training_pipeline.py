@@ -22,6 +22,8 @@ from sensor.logger import logging
 import sys
 
 class TrainPipeline:
+
+    is_pipeline_running = False
     def __init__(self):
         training_pipeline_config = TrainingPipelineConfig()
         self.training_pipeline_config = training_pipeline_config
@@ -101,6 +103,7 @@ class TrainPipeline:
         
     def run_pipeline(self):
         try:
+            TrainPipeline.is_pipeline_running = True
             data_ingestion_artifact = self.start_data_ingestion()
             data_validation_artifact  = self.start_data_validation(data_ingestion_artifact=data_ingestion_artifact)
             data_transformation_artifact = self.start_data_transformation(data_validation_artifact=data_validation_artifact)
@@ -109,7 +112,8 @@ class TrainPipeline:
             if not model_evaluation_artifact.is_model_accepted:
                 raise Exception("model not accepted :")
             model_pusher_artifact = self.start_model_pusher(model_evaluation_artifact=model_evaluation_artifact)
-            
+            TrainPipeline.is_pipeline_running = False
                 
         except Exception as e:
+            TrainPipeline.is_pipeline_running = False
             raise SensorException(e,sys)
